@@ -1,0 +1,23 @@
+name: Daily Commit
+
+on:
+  schedule:
+    - cron: '30 5 * * *'  # Runs every day at 5:30 AM UTC
+  workflow_dispatch:       # Optional: allows manual trigger
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Update daily timestamp (23f2004603@ds.study.iitm.ac.in)
+        run: |
+          echo "Last run: $(date -u)" > last_run.txt
+          git config --global user.name "GitHub Action"
+          git config --global user.email "23f2004603@ds.study.iitm.ac.in"
+          git add last_run.txt
+          git commit -m "Daily commit - $(date -u)"
+          git push
